@@ -1,0 +1,13 @@
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/controller/HomeController.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/config/BeanConfiguration.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/MadaApplication.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/service/PayPalService.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/model/Order/PurchaseUnit.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/config/WebConfig.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/model/PayPalOrder.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/model/PayPalToken.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/config/PayPalConfig.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/config/APIKeyAuthFilter.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/config/APISecurityConfig.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/controller/PayPalController.java
+/Users/bartdabrowski/mada/mada/src/main/java/com/madaclinicspa/service/impl/PayPalServiceImpl.java

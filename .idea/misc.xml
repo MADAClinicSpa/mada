@@ -5,10 +5,14 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../PayPal-JAVA-FullStack-Standard-Checkout-Sample/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="zulu-11" project-jdk-type="JavaSDK">
+  <component name="ProjectResources">
+    <resource url="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&amp;family=Source+Sans+Pro:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&amp;display=swap" location="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="zulu-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
