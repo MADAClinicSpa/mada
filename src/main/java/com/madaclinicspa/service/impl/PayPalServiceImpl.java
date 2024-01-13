@@ -1,13 +1,9 @@
 package com.madaclinicspa.service.impl;
 
-import com.madaclinicspa.model.PayPalToken;
+import com.madaclinicspa.model.paypal.*;
 import com.madaclinicspa.service.PayPalService;
-import com.paypal.base.util.PayPalURLEncoder;
-import com.paypal.core.object.AccessToken;
-import com.paypal.orders.Order;
-import com.paypal.orders.OrderRequest;
-import com.paypal.orders.OrdersCreateRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -44,14 +40,14 @@ public class PayPalServiceImpl implements PayPalService {
 
     private Optional<String> generateAccessToken() {
         String auth = getAuth(paypalClientId, paypalClientSecret);
-        //HttpEntity<?> request = createHeadersForToken(auth);
-        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<?> request = createHeadersForToken(auth);
+       /* HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", "Basic " + auth);
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         HttpEntity<?> request = new HttpEntity<>(requestBody, headers);
-        requestBody.add("grant_type", "client_credentials");
+        requestBody.add("grant_type", "client_credentials");*/
         ResponseEntity<PayPalToken> response = restTemplate.exchange(BASE + "/v1/oauth2/token", HttpMethod.POST, request, new ParameterizedTypeReference<PayPalToken>() {});
 
         if (nonNull(response.getBody()) && response.getStatusCode() == HttpStatus.OK) {
@@ -67,18 +63,27 @@ public class PayPalServiceImpl implements PayPalService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.set("Authorization", "Basic " + auth);
-
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("grant_type", "client_credentials");
         return new HttpEntity<>(requestBody, headers);
     }
 
-    private static HttpEntity<OrderRequest> createHeadersForOrders(String accessToken, OrderRequest ordersCreateRequest) {
+    private HttpEntity<OrderRequest> createHeadersForOrders(String accessToken, OrderRequest ordersCreateRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         headers.add("Content-Type", "application/json");
         headers.add("Accept", "application/json");
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<OrderRequest>(ordersCreateRequest, headers);
+    }
+
+    private HttpEntity<?> createHeaders(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/json");
+        headers.add("Accept", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(headers);
     }
 
     @Override
@@ -90,7 +95,28 @@ public class PayPalServiceImpl implements PayPalService {
                     BASE + "/v2/checkout/orders",
                     HttpMethod.POST,
                     entity,
-                    new ParameterizedTypeReference<Order>() {});
+                    new ParameterizedTypeReference<Order>() {
+                    });
+            if (nonNull(response.getBody())) {
+                return Optional.of(response.getBody());
+            } else {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CapturePayment> captureOrderPayment(String orderId) {
+        Optional<String> payPalToken = generateAccessToken();
+        if (payPalToken.isPresent()) {
+            HttpEntity<?> entity = createHeaders(payPalToken.get());
+            ResponseEntity<CapturePayment> response = restTemplate.exchange(
+                    BASE + "/v2/checkout/orders/" + orderId + "/capture",
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<CapturePayment>() {
+                    });
             if (nonNull(response.getBody())) {
                 return Optional.of(response.getBody());
             } else {

@@ -1,11 +1,14 @@
 package com.madaclinicspa.controller;
 
+import com.madaclinicspa.model.paypal.Capture;
+import com.madaclinicspa.model.paypal.CapturePayment;
+import com.madaclinicspa.model.paypal.Order;
+import com.madaclinicspa.model.paypal.OrderRequest;
 import com.madaclinicspa.service.PayPalService;
-import com.paypal.orders.Order;
-import com.paypal.orders.OrderRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +62,17 @@ public class PayPalController {
             log.info("Creating Order");
             Optional<Order> order = payPalService.createOrder(orderRequest);
             return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.unprocessableEntity().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping ("/api/capture-order/{orderId}")
+    public ResponseEntity<CapturePayment> captureOrderPayment(@PathVariable(value = "orderId") String orderId) {
+        try {
+            log.info("Capture Order");
+            Optional<CapturePayment> captureOrderPayment = payPalService.captureOrderPayment(orderId);
+            return captureOrderPayment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.unprocessableEntity().build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
